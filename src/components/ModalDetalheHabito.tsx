@@ -87,19 +87,13 @@ export const ModalDetalheHabito: React.FC<ModalDetalheHabitoProps> = ({
               <div
                 key={dia.dataISO}
                 title={dia.dataISO}
-                className={`aspect-square rounded-md ${
-                  dia.concluido
-                    ? 'bg-blue-600'
-                    : dia.livre
-                    ? 'bg-amber-100 dark:bg-amber-950/40 ring-1 ring-amber-300 dark:ring-amber-800'
-                    : 'bg-zinc-100 dark:bg-zinc-800'
-                }`}
+                className={`aspect-square rounded-md ${dia.concluido ? 'bg-blue-600' : 'bg-zinc-100 dark:bg-zinc-800'
+                  }`}
               />
             ))}
           </div>
         </div>
 
-        {/* Zona de exclusão */}
         {!confirmandoExclusao ? (
           <button
             onClick={() => setConfirmandoExclusao(true)}

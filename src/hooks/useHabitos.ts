@@ -10,7 +10,10 @@ export function useHabitos() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // Carrega do localStorage apenas após montar no cliente (dado externo ao React,
+    // indisponível durante SSR) — padrão necessário aqui, por isso a regra é suprimida.
     const dados = carregarHabitosStorage().map(reconciliarSequencia);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHabitos(dados);
     setIsLoaded(true);
   }, []);
@@ -23,32 +26,30 @@ export function useHabitos() {
     });
   };
 
-  // dentro de useHabitos.ts, junto com `confirmar`:
-   const criar = (titulo: string, diasLivres: number[] = []) => {
-  setHabitos((prev) => {
-    const novo: Habito = {
-      id: crypto.randomUUID(),
-      titulo,
-      diasSeguidos: 0,
-      maiorSequenciaHistorica: 0,
-      ultimaConfirmacao: '',
-      historico: [],
-      diasLivres,
-    };
-    const atualizado = [...prev, novo];
-    salvarHabitosStorage(atualizado);
-    return atualizado;
-  });
-};
+  const criar = (titulo: string, diasLivres: number[] = []) => {
+    setHabitos((prev) => {
+      const novo: Habito = {
+        id: crypto.randomUUID(),
+        titulo,
+        diasSeguidos: 0,
+        maiorSequenciaHistorica: 0,
+        ultimaConfirmacao: '',
+        historico: [],
+        diasLivres,
+      };
+      const atualizado = [...prev, novo];
+      salvarHabitosStorage(atualizado);
+      return atualizado;
+    });
+  };
 
-const excluir = (id: string) => {
-  setHabitos((prev) => {
-    const atualizado = prev.filter((h) => h.id !== id);
-    salvarHabitosStorage(atualizado);
-    return atualizado;
-  });
-};
+  const excluir = (id: string) => {
+    setHabitos((prev) => {
+      const atualizado = prev.filter((h) => h.id !== id);
+      salvarHabitosStorage(atualizado);
+      return atualizado;
+    });
+  };
 
-return { habitos, isLoaded, confirmar, criar, excluir };
-
+  return { habitos, isLoaded, confirmar, criar, excluir };
 }

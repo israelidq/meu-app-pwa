@@ -17,13 +17,11 @@ export function diferencaEmDias(inicioISO: string, fimISO: string): number {
   return Math.round((fim - inicio) / 86_400_000);
 }
 
-// NOVO: dia da semana (0 = domingo ... 6 = sábado) de uma data ISO, sem ambiguidade de fuso
 export function diaDaSemanaISO(dataISO: string): number {
   const [ano, mes, dia] = dataISO.split('-').map(Number);
   return new Date(ano, mes - 1, dia).getDay();
 }
 
-// NOVO: soma (ou subtrai) dias a uma data ISO, retornando outra data ISO local
 export function adicionarDiasISO(dataISO: string, quantidade: number): string {
   const [ano, mes, dia] = dataISO.split('-').map(Number);
   const d = new Date(ano, mes - 1, dia);

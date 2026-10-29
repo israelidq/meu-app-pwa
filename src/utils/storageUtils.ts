@@ -11,7 +11,7 @@ export const carregarHabitosStorage = (): Habito[] => {
     return parsed.map((h) => ({
       ...h,
       maiorSequenciaHistorica: h.maiorSequenciaHistorica ?? h.diasSeguidos ?? 0,
-      diasLivres: h.diasLivres ?? [], // hábitos antigos ficam sem dia livre por padrão
+      diasLivres: h.diasLivres ?? [],
     }));
   } catch (erro) {
     console.error('Erro ao carregar hábitos do localStorage:', erro);

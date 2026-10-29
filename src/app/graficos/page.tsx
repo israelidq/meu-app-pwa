@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Habito } from '@/types/habito';
-import { carregarHabitosStorage } from '@/utils/storageUtils';
-import { reconciliarSequencia } from '@/utils/habitoUtils';
+import { useHabitos } from '@/hooks/useHabitos';
 import { obterDataLocalISO } from '@/utils/dateUtils';
 
 interface DiaSemana {
@@ -12,14 +10,10 @@ interface DiaSemana {
 }
 
 export default function GraficosPage() {
-  const [habitos, setHabitos] = useState<Habito[]>([]);
+  const { habitos, isLoaded } = useHabitos();
   const [ultimosDias, setUltimosDias] = useState<DiaSemana[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const dados = carregarHabitosStorage().map(reconciliarSequencia);
-    setHabitos(dados);
-
     const dias: DiaSemana[] = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
@@ -27,9 +21,8 @@ export default function GraficosPage() {
       const nomeDia = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
       dias.push({ dataISO: obterDataLocalISO(d), rotulo: nomeDia });
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUltimosDias(dias);
-
-    setIsLoaded(true);
   }, []);
 
   const calcularConclusoesNoDia = (dataISO: string) => {
@@ -45,7 +38,7 @@ export default function GraficosPage() {
     0
   );
 
-  if (!isLoaded) {
+  if (!isLoaded || ultimosDias.length === 0) {
     return (
       <main className="min-h-screen p-4 flex items-center justify-center">
         <p className="text-slate-400 text-sm">Carregando estatísticas...</p>

@@ -40,7 +40,7 @@ export const CardHabito: React.FC<CardHabitoProps> = ({
       <button
         type="button"
         onClick={(e) => {
-          e.stopPropagation(); // impede que o clique no botão também abra o modal
+          e.stopPropagation();
           onConfirmar(habito.id);
         }}
         disabled={concluidoHoje}

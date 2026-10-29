@@ -12,21 +12,19 @@ export function foiConfirmadoHoje(habito: Habito): boolean {
   return habito.ultimaConfirmacao === hoje;
 }
 
-// Verifica se não houve nenhum dia OBRIGATÓRIO perdido entre duas datas
 function sequenciaContinua(
   ultimaConfirmacaoISO: string,
   hojeISO: string,
   diasLivres: number[]
 ): boolean {
   const diff = diferencaEmDias(ultimaConfirmacaoISO, hojeISO);
-  if (diff <= 1) return true; // confirmou hoje ou ontem: sem gap
+  if (diff <= 1) return true;
 
-  // percorre os dias ENTRE a última confirmação e hoje (exclusive-exclusive)
   for (let i = 1; i < diff; i++) {
     const dataISO = adicionarDiasISO(ultimaConfirmacaoISO, i);
     const diaSemana = diaDaSemanaISO(dataISO);
     if (!diasLivres.includes(diaSemana)) {
-      return false; // era dia obrigatório e não foi cumprido
+      return false;
     }
   }
   return true;
@@ -67,7 +65,7 @@ export interface EstatisticasHabito {
   totalConclusoes: number;
   sequenciaAtual: number;
   recorde: number;
-  ultimos30Dias: { dataISO: string; concluido: boolean; livre: boolean }[];
+  ultimos30Dias: { dataISO: string; concluido: boolean }[];
 }
 
 export function obterEstatisticasHabito(habito: Habito): EstatisticasHabito {
@@ -79,7 +77,6 @@ export function obterEstatisticasHabito(habito: Habito): EstatisticasHabito {
     ultimos30Dias.push({
       dataISO,
       concluido: habito.historico.includes(dataISO),
-      livre: habito.diasLivres.includes(diaDaSemanaISO(dataISO)),
     });
   }
 
