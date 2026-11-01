@@ -17,8 +17,7 @@ export const ModalDetalheHabito: React.FC<ModalDetalheHabitoProps> = ({
   onExcluir,
   onEditarDiasLivres,
 }) => {
-  console.log('DEBUG props:', { onClose: typeof onClose, onExcluir: typeof onExcluir, onEditarDiasLivres: typeof onEditarDiasLivres });
-
+  
   const [confirmandoExclusao, setConfirmandoExclusao] = useState(false);
 
   if (!habito) return null;

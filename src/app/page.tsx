@@ -5,12 +5,19 @@ import { useHabitos } from '@/hooks/useHabitos';
 import { CardHabito } from '@/components/CardHabito';
 import { FormNovoHabito } from '@/components/FormNovoHabito';
 import { ModalDetalheHabito } from '@/components/ModalDetalheHabito';
+import { ModalEditarDiasLivres } from '@/components/ModalEditarDiasLivres';
 import { Habito } from '@/types/habito';
 
 export default function HomePage() {
-  const { habitos, isLoaded, confirmar, criar, excluir } = useHabitos();
+  const { habitos, isLoaded, confirmar, criar, excluir, atualizarDiasLivres } = useHabitos();
   const [modalAberto, setModalAberto] = useState(false);
   const [habitoSelecionado, setHabitoSelecionado] = useState<Habito | null>(null);
+  const [habitoEditandoDias, setHabitoEditandoDias] = useState<Habito | null>(null);
+
+  const handleEditarDiasLivres = (habito: Habito) => {
+    setHabitoSelecionado(null);
+    setHabitoEditandoDias(habito);
+  };
 
   if (!isLoaded) {
     return (
@@ -59,6 +66,13 @@ export default function HomePage() {
         habito={habitoSelecionado}
         onClose={() => setHabitoSelecionado(null)}
         onExcluir={excluir}
+        onEditarDiasLivres={handleEditarDiasLivres}
+      />
+
+      <ModalEditarDiasLivres
+        habito={habitoEditandoDias}
+        onClose={() => setHabitoEditandoDias(null)}
+        onSalvar={atualizarDiasLivres}
       />
     </main>
   );
