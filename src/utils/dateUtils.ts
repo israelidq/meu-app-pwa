@@ -28,3 +28,20 @@ export function adicionarDiasISO(dataISO: string, quantidade: number): string {
   d.setDate(d.getDate() + quantidade);
   return obterDataLocalISO(d);
 }
+
+// Conta quantos dias úteis (segunda a sexta) já passaram entre a data de início
+// (inclusive) e hoje (exclusive). O dia em que o contador é criado ainda não é
+// descontado — o desconto só acontece a partir do próximo dia útil que passar.
+export function contarDiasUteisDecorridos(dataInicioISO: string): number {
+  const hoje = obterDataAtualISO();
+  const totalDiasCorridos = diferencaEmDias(dataInicioISO, hoje);
+  let uteis = 0;
+  for (let i = 0; i < totalDiasCorridos; i++) {
+    const dataISO = adicionarDiasISO(dataInicioISO, i);
+    const diaSemana = diaDaSemanaISO(dataISO);
+    if (diaSemana !== 0 && diaSemana !== 6) {
+      uteis++;
+    }
+  }
+  return uteis;
+}
