@@ -8,13 +8,17 @@ interface ModalDetalheHabitoProps {
   habito: Habito | null;
   onClose: () => void;
   onExcluir: (id: string) => void;
-}
+  onEditarDiasLivres: (habito: Habito) => void;
+} 
 
 export const ModalDetalheHabito: React.FC<ModalDetalheHabitoProps> = ({
   habito,
   onClose,
   onExcluir,
+  onEditarDiasLivres,
 }) => {
+  console.log('DEBUG props:', { onClose: typeof onClose, onExcluir: typeof onExcluir, onEditarDiasLivres: typeof onEditarDiasLivres });
+
   const [confirmandoExclusao, setConfirmandoExclusao] = useState(false);
 
   if (!habito) return null;
@@ -87,20 +91,27 @@ export const ModalDetalheHabito: React.FC<ModalDetalheHabitoProps> = ({
               <div
                 key={dia.dataISO}
                 title={dia.dataISO}
-                className={`aspect-square rounded-md ${dia.concluido ? 'bg-blue-600' : 'bg-zinc-100 dark:bg-zinc-800'
-                  }`}
+                className={`aspect-square rounded-md ${dia.concluido ? 'bg-blue-600' : 'bg-zinc-100 dark:bg-zinc-800'}`}
               />
             ))}
           </div>
         </div>
 
         {!confirmandoExclusao ? (
-          <button
-            onClick={() => setConfirmandoExclusao(true)}
-            className="w-full py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
-          >
-            Excluir hábito
-          </button>
+          <div className="flex flex-col gap-2">
+            <button
+              onClick={() => onEditarDiasLivres(habito)}
+              className="w-full py-2.5 rounded-xl text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all"
+            >
+              Editar dias livres
+            </button>
+            <button
+              onClick={() => setConfirmandoExclusao(true)}
+              className="w-full py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+            >
+              Excluir hábito
+            </button>
+          </div>
         ) : (
           <div className="flex flex-col gap-2 p-3 bg-red-50 dark:bg-red-950/30 rounded-xl">
             <p className="text-xs text-red-700 dark:text-red-400 text-center font-medium">

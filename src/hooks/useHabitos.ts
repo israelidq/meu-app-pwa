@@ -10,8 +10,6 @@ export function useHabitos() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Carrega do localStorage apenas após montar no cliente (dado externo ao React,
-    // indisponível durante SSR) — padrão necessário aqui, por isso a regra é suprimida.
     const dados = carregarHabitosStorage().map(reconciliarSequencia);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHabitos(dados);
@@ -51,5 +49,15 @@ export function useHabitos() {
     });
   };
 
-  return { habitos, isLoaded, confirmar, criar, excluir };
+  const atualizarDiasLivres = (id: string, diasLivres: number[]) => {
+    setHabitos((prev) => {
+      const atualizado = prev.map((h) =>
+        h.id === id ? { ...h, diasLivres } : h
+      );
+      salvarHabitosStorage(atualizado);
+      return atualizado;
+    });
+  };
+
+  return { habitos, isLoaded, confirmar, criar, excluir, atualizarDiasLivres };
 }

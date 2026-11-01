@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { SeletorDiasLivres } from './SeletorDiasLivres';
 
 interface FormNovoHabitoProps {
   isOpen: boolean;
@@ -14,7 +15,7 @@ export const FormNovoHabito: React.FC<FormNovoHabitoProps> = ({
   onCriarHabito,
 }) => {
   const [titulo, setTitulo] = useState('');
-  const [domingoLivre, setDomingoLivre] = useState(false);
+  const [diasLivres, setDiasLivres] = useState<number[]>([]);
 
   if (!isOpen) return null;
 
@@ -22,9 +23,9 @@ export const FormNovoHabito: React.FC<FormNovoHabitoProps> = ({
     e.preventDefault();
     if (!titulo.trim()) return;
 
-    onCriarHabito(titulo.trim(), domingoLivre ? [0] : []);
+    onCriarHabito(titulo.trim(), diasLivres);
     setTitulo('');
-    setDomingoLivre(false);
+    setDiasLivres([]);
     onClose();
   };
 
@@ -62,17 +63,7 @@ export const FormNovoHabito: React.FC<FormNovoHabitoProps> = ({
             />
           </div>
 
-          <label className="flex items-center gap-3 px-1 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={domingoLivre}
-              onChange={(e) => setDomingoLivre(e.target.checked)}
-              className="w-5 h-5 rounded-md accent-blue-600"
-            />
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">
-              Domingo é dia livre (não quebra a sequência)
-            </span>
-          </label>
+          <SeletorDiasLivres diasLivres={diasLivres} onChange={setDiasLivres} />
 
           <div className="flex items-center justify-end gap-3 mt-2">
             <button
